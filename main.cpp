@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -8,6 +9,8 @@ int main()
     double distance;
     int priority;
     char luggageOption;
+    string recommendedRide;
+    string recommendationReason;
 
     cout << "========================================" << endl;
     cout << "        GRAB RIDE SELECTION SYSTEM" << endl;
@@ -120,6 +123,40 @@ int main()
     {
         cout << "Luggage: No" << endl;
     }
+
+    if (passengerCount >= 5)
+    {
+        recommendedRide = "6-Seater";
+        recommendationReason = "A larger vehicle is needed for five or more passengers.";
+    }
+    else if ((luggageOption == 'Y' || luggageOption == 'y') && passengerCount >= 3)
+    {
+        recommendedRide = "6-Seater";
+        recommendationReason = "A larger vehicle provides more room for the passengers and luggage.";
+    }
+    else if (passengerCount == 1 && priority == 1 && distance <= 5)
+    {
+        recommendedRide = "Motorcycle Ride";
+        recommendationReason = "A motorcycle is suitable for one passenger taking a short budget trip.";
+    }
+    else if (priority == 2)
+    {
+        recommendedRide = "Premium Car";
+        recommendationReason = "A premium car is recommended because comfort is the main priority.";
+    }
+    else if (passengerCount == 1 && priority == 3)
+    {
+        recommendedRide = "Motorcycle Ride";
+        recommendationReason = "A motorcycle is suitable for one passenger who prioritises speed.";
+    }
+    else
+    {
+        recommendedRide = "Standard Car";
+        recommendationReason = "A standard car is suitable for the selected trip requirements.";
+    }
+
+    cout << "Recommended ride: " << recommendedRide << endl;
+    cout << "Reason: " << recommendationReason << endl;
 
     cout << endl;
     cout << "Thank you for using the system." << endl;
