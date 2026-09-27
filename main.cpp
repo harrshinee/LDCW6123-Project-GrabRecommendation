@@ -1,4 +1,5 @@
 #include <iostream>
+#include <limits>
 #include <string>
 
 using namespace std;
@@ -7,11 +8,11 @@ void displayWelcome();
 int getPassengerCount();
 double getDistance();
 int getPriority();
-char getLuggageOption();
+int getLuggageOption();
 string recommendRide(int passengerCount, double distance, int priority,
-                     char luggageOption, string &reason);
+                     int luggageOption, string &reason);
 void displayRecommendation(int passengerCount, double distance, int priority,
-                           char luggageOption, const string &recommendedRide,
+                           int luggageOption, const string &recommendedRide,
                            const string &reason);
 
 int main()
@@ -36,8 +37,8 @@ int main()
         return 1;
     }
 
-    char luggageOption = getLuggageOption();
-    if (luggageOption == '\0')
+    int luggageOption = getLuggageOption();
+    if (luggageOption == 0)
     {
         return 1;
     }
@@ -70,116 +71,118 @@ int getPassengerCount()
 {
     int passengerCount;
 
-    cout << "Enter the number of passengers (1-6): ";
-    if (!(cin >> passengerCount))
+    while (true)
     {
-        cerr << "Unable to read the passenger count." << endl;
-        return 0;
-    }
+        cout << "Enter the number of passengers (1-6): ";
+        if (cin >> passengerCount && passengerCount >= 1 && passengerCount <= 6)
+        {
+            return passengerCount;
+        }
 
-    while (passengerCount < 1 || passengerCount > 6)
-    {
-        cout << "Invalid number of passengers. Please enter a value from 1 to 6: ";
-        if (!(cin >> passengerCount))
+        if (cin.eof())
         {
             cerr << "Unable to read the passenger count." << endl;
             return 0;
         }
-    }
 
-    return passengerCount;
+        cout << "Invalid input. Please enter a whole number from 1 to 6." << endl;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
 }
 
 double getDistance()
 {
     double distance;
 
-    cout << "Enter the travel distance in kilometres: ";
-    if (!(cin >> distance))
+    while (true)
     {
-        cerr << "Unable to read the travel distance." << endl;
-        return 0;
-    }
+        cout << "Enter the travel distance in kilometres: ";
+        if (cin >> distance && distance > 0)
+        {
+            return distance;
+        }
 
-    while (distance <= 0)
-    {
-        cout << "Invalid distance. Please enter a value greater than 0: ";
-        if (!(cin >> distance))
+        if (cin.eof())
         {
             cerr << "Unable to read the travel distance." << endl;
             return 0;
         }
-    }
 
-    return distance;
+        cout << "Invalid input. Please enter a distance greater than 0." << endl;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
 }
 
 int getPriority()
 {
     int priority;
 
-    cout << endl;
-    cout << "Select your ride priority:" << endl;
-    cout << "1. Budget" << endl;
-    cout << "2. Comfort" << endl;
-    cout << "3. Speed" << endl;
-    cout << "Enter your choice (1-3): ";
-
-    if (!(cin >> priority))
+    while (true)
     {
-        cerr << "Unable to read the ride priority." << endl;
-        return 0;
-    }
+        cout << endl;
+        cout << "Select your ride priority:" << endl;
+        cout << "1. Budget" << endl;
+        cout << "2. Comfort" << endl;
+        cout << "3. Speed" << endl;
+        cout << "Enter your choice (1-3): ";
 
-    while (priority < 1 || priority > 3)
-    {
-        cout << "Invalid choice. Please enter a value from 1 to 3: ";
-        if (!(cin >> priority))
+        if (cin >> priority && priority >= 1 && priority <= 3)
+        {
+            return priority;
+        }
+
+        if (cin.eof())
         {
             cerr << "Unable to read the ride priority." << endl;
             return 0;
         }
-    }
 
-    return priority;
+        cout << "Invalid choice. Please enter a whole number from 1 to 3." << endl;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
 }
 
-char getLuggageOption()
+int getLuggageOption()
 {
-    char luggageOption;
+    int luggageOption;
 
-    cout << endl;
-    cout << "Do you have luggage? (Y/N): ";
-
-    if (!(cin >> luggageOption))
+    while (true)
     {
-        cerr << "Unable to read the luggage option." << endl;
-        return '\0';
-    }
+        cout << endl;
+        cout << "Do you have luggage?" << endl;
+        cout << "1. Yes" << endl;
+        cout << "2. No" << endl;
+        cout << "Enter your choice (1-2): ";
 
-    while (luggageOption != 'Y' && luggageOption != 'y' &&
-           luggageOption != 'N' && luggageOption != 'n')
-    {
-        cout << "Invalid choice. Please enter Y for Yes or N for No: ";
-        if (!(cin >> luggageOption))
+        if (cin >> luggageOption && luggageOption >= 1 && luggageOption <= 2)
+        {
+            return luggageOption;
+        }
+
+        if (cin.eof())
         {
             cerr << "Unable to read the luggage option." << endl;
-            return '\0';
+            return 0;
         }
-    }
 
-    return luggageOption;
+        cout << "Invalid choice. Please enter 1 for Yes or 2 for No." << endl;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
 }
 
 string recommendRide(int passengerCount, double distance, int priority,
-                     char luggageOption, string &reason)
+                     int luggageOption, string &reason)
 {
     if (passengerCount >= 5)
     {
         reason = "A larger vehicle is needed for five or more passengers.";
         return "6-Seater";
     }
-    else if ((luggageOption == 'Y' || luggageOption == 'y') && passengerCount >= 3)
+    else if (luggageOption == 1 && passengerCount >= 3)
     {
         reason = "A larger vehicle provides more room for the passengers and luggage.";
         return "6-Seater";
@@ -205,7 +208,7 @@ string recommendRide(int passengerCount, double distance, int priority,
 }
 
 void displayRecommendation(int passengerCount, double distance, int priority,
-                           char luggageOption, const string &recommendedRide,
+                           int luggageOption, const string &recommendedRide,
                            const string &reason)
 {
     cout << endl;
@@ -226,7 +229,7 @@ void displayRecommendation(int passengerCount, double distance, int priority,
         break;
     }
 
-    if (luggageOption == 'Y' || luggageOption == 'y')
+    if (luggageOption == 1)
     {
         cout << "Luggage: Yes" << endl;
     }
