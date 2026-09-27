@@ -6,6 +6,7 @@ int main()
 {
     int passengerCount;
     double distance;
+    int priority;
 
     cout << "========================================" << endl;
     cout << "        GRAB RIDE SELECTION SYSTEM" << endl;
@@ -50,8 +51,46 @@ int main()
     }
 
     cout << endl;
+    cout << "Select your ride priority:" << endl;
+    cout << "1. Budget" << endl;
+    cout << "2. Comfort" << endl;
+    cout << "3. Speed" << endl;
+    cout << "Enter your choice (1-3): ";
+
+    if (!(cin >> priority))
+    {
+        cerr << "Unable to read the ride priority." << endl;
+        return 1;
+    }
+
+    while (priority < 1 || priority > 3)
+    {
+        cout << "Invalid choice. Please enter a value from 1 to 3: ";
+        if (!(cin >> priority))
+        {
+            cerr << "Unable to read the ride priority." << endl;
+            return 1;
+        }
+    }
+
+    cout << endl;
     cout << "Passenger count: " << passengerCount << endl;
     cout << "Travel distance: " << distance << " km" << endl;
+    cout << "Ride priority: ";
+
+    switch (priority)
+    {
+    case 1:
+        cout << "Budget" << endl;
+        break;
+    case 2:
+        cout << "Comfort" << endl;
+        break;
+    case 3:
+        cout << "Speed" << endl;
+        break;
+    }
+
     cout << endl;
     cout << "Thank you for using the system." << endl;
 
