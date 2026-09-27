@@ -38,6 +38,8 @@
 *.exe
 *.out
 *.app
+grab_system
+grab_system.exe
 
 # Build directories
 build/
