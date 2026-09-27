@@ -3,15 +3,60 @@
 
 using namespace std;
 
+void displayWelcome();
+int getPassengerCount();
+double getDistance();
+int getPriority();
+char getLuggageOption();
+string recommendRide(int passengerCount, double distance, int priority,
+                     char luggageOption, string &reason);
+void displayRecommendation(int passengerCount, double distance, int priority,
+                           char luggageOption, const string &recommendedRide,
+                           const string &reason);
+
 int main()
 {
-    int passengerCount;
-    double distance;
-    int priority;
-    char luggageOption;
-    string recommendedRide;
-    string recommendationReason;
+    displayWelcome();
 
+    int passengerCount = getPassengerCount();
+    if (passengerCount == 0)
+    {
+        return 1;
+    }
+
+    double distance = getDistance();
+    if (distance == 0)
+    {
+        return 1;
+    }
+
+    int priority = getPriority();
+    if (priority == 0)
+    {
+        return 1;
+    }
+
+    char luggageOption = getLuggageOption();
+    if (luggageOption == '\0')
+    {
+        return 1;
+    }
+
+    string reason;
+    string recommendedRide = recommendRide(passengerCount, distance, priority,
+                                           luggageOption, reason);
+
+    displayRecommendation(passengerCount, distance, priority, luggageOption,
+                          recommendedRide, reason);
+
+    cout << endl;
+    cout << "Thank you for using the system." << endl;
+
+    return 0;
+}
+
+void displayWelcome()
+{
     cout << "========================================" << endl;
     cout << "        GRAB RIDE SELECTION SYSTEM" << endl;
     cout << "========================================" << endl;
@@ -19,12 +64,17 @@ int main()
     cout << "Welcome to the Grab Ride Selection System." << endl;
     cout << "This program will help recommend a ride option." << endl;
     cout << endl;
+}
+
+int getPassengerCount()
+{
+    int passengerCount;
 
     cout << "Enter the number of passengers (1-6): ";
     if (!(cin >> passengerCount))
     {
         cerr << "Unable to read the passenger count." << endl;
-        return 1;
+        return 0;
     }
 
     while (passengerCount < 1 || passengerCount > 6)
@@ -33,15 +83,22 @@ int main()
         if (!(cin >> passengerCount))
         {
             cerr << "Unable to read the passenger count." << endl;
-            return 1;
+            return 0;
         }
     }
+
+    return passengerCount;
+}
+
+double getDistance()
+{
+    double distance;
 
     cout << "Enter the travel distance in kilometres: ";
     if (!(cin >> distance))
     {
         cerr << "Unable to read the travel distance." << endl;
-        return 1;
+        return 0;
     }
 
     while (distance <= 0)
@@ -50,9 +107,16 @@ int main()
         if (!(cin >> distance))
         {
             cerr << "Unable to read the travel distance." << endl;
-            return 1;
+            return 0;
         }
     }
+
+    return distance;
+}
+
+int getPriority()
+{
+    int priority;
 
     cout << endl;
     cout << "Select your ride priority:" << endl;
@@ -64,7 +128,7 @@ int main()
     if (!(cin >> priority))
     {
         cerr << "Unable to read the ride priority." << endl;
-        return 1;
+        return 0;
     }
 
     while (priority < 1 || priority > 3)
@@ -73,9 +137,16 @@ int main()
         if (!(cin >> priority))
         {
             cerr << "Unable to read the ride priority." << endl;
-            return 1;
+            return 0;
         }
     }
+
+    return priority;
+}
+
+char getLuggageOption()
+{
+    char luggageOption;
 
     cout << endl;
     cout << "Do you have luggage? (Y/N): ";
@@ -83,7 +154,7 @@ int main()
     if (!(cin >> luggageOption))
     {
         cerr << "Unable to read the luggage option." << endl;
-        return 1;
+        return '\0';
     }
 
     while (luggageOption != 'Y' && luggageOption != 'y' &&
@@ -93,10 +164,50 @@ int main()
         if (!(cin >> luggageOption))
         {
             cerr << "Unable to read the luggage option." << endl;
-            return 1;
+            return '\0';
         }
     }
 
+    return luggageOption;
+}
+
+string recommendRide(int passengerCount, double distance, int priority,
+                     char luggageOption, string &reason)
+{
+    if (passengerCount >= 5)
+    {
+        reason = "A larger vehicle is needed for five or more passengers.";
+        return "6-Seater";
+    }
+    else if ((luggageOption == 'Y' || luggageOption == 'y') && passengerCount >= 3)
+    {
+        reason = "A larger vehicle provides more room for the passengers and luggage.";
+        return "6-Seater";
+    }
+    else if (passengerCount == 1 && priority == 1 && distance <= 5)
+    {
+        reason = "A motorcycle is suitable for one passenger taking a short budget trip.";
+        return "Motorcycle Ride";
+    }
+    else if (priority == 2)
+    {
+        reason = "A premium car is recommended because comfort is the main priority.";
+        return "Premium Car";
+    }
+    else if (passengerCount == 1 && priority == 3)
+    {
+        reason = "A motorcycle is suitable for one passenger who prioritises speed.";
+        return "Motorcycle Ride";
+    }
+
+    reason = "A standard car is suitable for the selected trip requirements.";
+    return "Standard Car";
+}
+
+void displayRecommendation(int passengerCount, double distance, int priority,
+                           char luggageOption, const string &recommendedRide,
+                           const string &reason)
+{
     cout << endl;
     cout << "Passenger count: " << passengerCount << endl;
     cout << "Travel distance: " << distance << " km" << endl;
@@ -124,42 +235,6 @@ int main()
         cout << "Luggage: No" << endl;
     }
 
-    if (passengerCount >= 5)
-    {
-        recommendedRide = "6-Seater";
-        recommendationReason = "A larger vehicle is needed for five or more passengers.";
-    }
-    else if ((luggageOption == 'Y' || luggageOption == 'y') && passengerCount >= 3)
-    {
-        recommendedRide = "6-Seater";
-        recommendationReason = "A larger vehicle provides more room for the passengers and luggage.";
-    }
-    else if (passengerCount == 1 && priority == 1 && distance <= 5)
-    {
-        recommendedRide = "Motorcycle Ride";
-        recommendationReason = "A motorcycle is suitable for one passenger taking a short budget trip.";
-    }
-    else if (priority == 2)
-    {
-        recommendedRide = "Premium Car";
-        recommendationReason = "A premium car is recommended because comfort is the main priority.";
-    }
-    else if (passengerCount == 1 && priority == 3)
-    {
-        recommendedRide = "Motorcycle Ride";
-        recommendationReason = "A motorcycle is suitable for one passenger who prioritises speed.";
-    }
-    else
-    {
-        recommendedRide = "Standard Car";
-        recommendationReason = "A standard car is suitable for the selected trip requirements.";
-    }
-
     cout << "Recommended ride: " << recommendedRide << endl;
-    cout << "Reason: " << recommendationReason << endl;
-
-    cout << endl;
-    cout << "Thank you for using the system." << endl;
-
-    return 0;
+    cout << "Reason: " << reason << endl;
 }
