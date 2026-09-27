@@ -5,6 +5,7 @@
 
 using namespace std;
 
+// Function declarations
 void displayWelcome();
 int getPassengerCount();
 double getDistance();
@@ -19,16 +20,19 @@ bool askToContinue();
 
 int main()
 {
+    // Display the system title and introduction
     displayWelcome();
 
     bool continueProgram;
 
+    // Repeat the ride selection process until the user chooses to stop
     do
     {
         cout << "----------------------------------------" << endl;
         cout << "              TRIP DETAILS" << endl;
         cout << "----------------------------------------" << endl;
 
+        // Collect and validate trip information from the user
         int passengerCount = getPassengerCount();
         if (passengerCount == 0)
         {
@@ -53,10 +57,12 @@ int main()
             return 1;
         }
 
+        // Process the inputs and determine the recommended ride
         string reason;
         string recommendedRide = recommendRide(passengerCount, distance, priority,
                                                luggageOption, reason);
 
+         // Display the user's trip details and final recommendation
         displayRecommendation(passengerCount, distance, priority, luggageOption,
                               recommendedRide, reason);
 
@@ -68,7 +74,7 @@ int main()
 
     return 0;
 }
-
+// Displays the program title, purpose and simulation disclaimer
 void displayWelcome()
 {
     cout << "========================================" << endl;
@@ -81,6 +87,7 @@ void displayWelcome()
     cout << endl;
 }
 
+// Gets the number of passengers and ensures the value is between 1 and 6
 int getPassengerCount()
 {
     int passengerCount;
@@ -92,19 +99,22 @@ int getPassengerCount()
         {
             return passengerCount;
         }
-
+ 
+        // Stop the program safely if the input stream cannot be read
         if (cin.eof())
         {
             cerr << "Unable to read the passenger count." << endl;
             return 0;
         }
 
+        // Clear invalid input so the user can try again
         cout << "Invalid input. Please enter a whole number from 1 to 6." << endl;
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
 }
 
+// Gets the travel distance and ensures that it is greater than zero
 double getDistance()
 {
     double distance;
@@ -123,12 +133,14 @@ double getDistance()
             return 0;
         }
 
+        // Clear invalid input before requesting the distance again
         cout << "Invalid input. Please enter a distance greater than 0." << endl;
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
 }
 
+// Displays the priority menu and validates the user's selection
 int getPriority()
 {
     int priority;
@@ -159,6 +171,7 @@ int getPriority()
     }
 }
 
+// Asks whether the passenger has luggage and validates the selection
 int getLuggageOption()
 {
     int luggageOption;
@@ -188,45 +201,58 @@ int getLuggageOption()
     }
 }
 
+// Applies the ride-selection rules using passenger count, luggage,
+// priority and distance. The rules are checked in order of importance.
 string recommendRide(int passengerCount, double distance, int priority,
                      int luggageOption, string &reason)
 {
+    // Five or more passengers require the larger 6-seater
     if (passengerCount >= 5)
     {
         reason = "A larger vehicle is needed for five or more passengers.";
         return "6-Seater";
     }
+     // Three or more passengers with luggage need additional space
     else if (luggageOption == 1 && passengerCount >= 3)
     {
         reason = "A larger vehicle provides more room for the passengers and luggage.";
         return "6-Seater";
     }
+
+    // A motorcycle is recommended for a single passenger taking
+    // a short trip when budget is the main priority
     else if (passengerCount == 1 && priority == 1 && distance <= 5)
     {
         reason = "A motorcycle is suitable for one passenger taking a short budget trip.";
         return "Motorcycle Ride";
     }
+    // Comfort takes priority when vehicle capacity is not an issue
     else if (priority == 2)
     {
         reason = "A premium car is recommended because comfort is the main priority.";
         return "Premium Car";
     }
+
+    // A motorcycle is recommended to a single passenger prioritising speed
     else if (passengerCount == 1 && priority == 3)
     {
         reason = "A motorcycle is suitable for one passenger who prioritises speed.";
         return "Motorcycle Ride";
     }
 
+      // Standard Car acts as the default recommendation
     reason = "A standard car is suitable for the selected trip requirements.";
     return "Standard Car";
 }
 
+// Displays the trip information and recommendation in a formatted summary
 void displayRecommendation(int passengerCount, double distance, int priority,
                            int luggageOption, const string &recommendedRide,
                            const string &reason)
 {
     string priorityName;
 
+     // Convert the numeric priority into text for easier understanding
     switch (priority)
     {
     case 1:
@@ -260,6 +286,8 @@ void displayRecommendation(int passengerCount, double distance, int priority,
     cout << "========================================" << endl;
 }
 
+// Asks whether the user wants another recommendation.
+// Returns true to repeat the program and false to exit.
 bool askToContinue()
 {
     int choice;
