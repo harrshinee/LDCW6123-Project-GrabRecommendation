@@ -7,6 +7,7 @@ int main()
     int passengerCount;
     double distance;
     int priority;
+    char luggageOption;
 
     cout << "========================================" << endl;
     cout << "        GRAB RIDE SELECTION SYSTEM" << endl;
@@ -74,6 +75,26 @@ int main()
     }
 
     cout << endl;
+    cout << "Do you have luggage? (Y/N): ";
+
+    if (!(cin >> luggageOption))
+    {
+        cerr << "Unable to read the luggage option." << endl;
+        return 1;
+    }
+
+    while (luggageOption != 'Y' && luggageOption != 'y' &&
+           luggageOption != 'N' && luggageOption != 'n')
+    {
+        cout << "Invalid choice. Please enter Y for Yes or N for No: ";
+        if (!(cin >> luggageOption))
+        {
+            cerr << "Unable to read the luggage option." << endl;
+            return 1;
+        }
+    }
+
+    cout << endl;
     cout << "Passenger count: " << passengerCount << endl;
     cout << "Travel distance: " << distance << " km" << endl;
     cout << "Ride priority: ";
@@ -89,6 +110,15 @@ int main()
     case 3:
         cout << "Speed" << endl;
         break;
+    }
+
+    if (luggageOption == 'Y' || luggageOption == 'y')
+    {
+        cout << "Luggage: Yes" << endl;
+    }
+    else
+    {
+        cout << "Luggage: No" << endl;
     }
 
     cout << endl;
