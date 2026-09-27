@@ -14,41 +14,49 @@ string recommendRide(int passengerCount, double distance, int priority,
 void displayRecommendation(int passengerCount, double distance, int priority,
                            int luggageOption, const string &recommendedRide,
                            const string &reason);
+bool askToContinue();
 
 int main()
 {
     displayWelcome();
 
-    int passengerCount = getPassengerCount();
-    if (passengerCount == 0)
+    bool continueProgram;
+
+    do
     {
-        return 1;
-    }
+        int passengerCount = getPassengerCount();
+        if (passengerCount == 0)
+        {
+            return 1;
+        }
 
-    double distance = getDistance();
-    if (distance == 0)
-    {
-        return 1;
-    }
+        double distance = getDistance();
+        if (distance == 0)
+        {
+            return 1;
+        }
 
-    int priority = getPriority();
-    if (priority == 0)
-    {
-        return 1;
-    }
+        int priority = getPriority();
+        if (priority == 0)
+        {
+            return 1;
+        }
 
-    int luggageOption = getLuggageOption();
-    if (luggageOption == 0)
-    {
-        return 1;
-    }
+        int luggageOption = getLuggageOption();
+        if (luggageOption == 0)
+        {
+            return 1;
+        }
 
-    string reason;
-    string recommendedRide = recommendRide(passengerCount, distance, priority,
-                                           luggageOption, reason);
+        string reason;
+        string recommendedRide = recommendRide(passengerCount, distance, priority,
+                                               luggageOption, reason);
 
-    displayRecommendation(passengerCount, distance, priority, luggageOption,
-                          recommendedRide, reason);
+        displayRecommendation(passengerCount, distance, priority, luggageOption,
+                              recommendedRide, reason);
+
+        continueProgram = askToContinue();
+    } while (continueProgram);
 
     cout << endl;
     cout << "Thank you for using the system." << endl;
@@ -240,4 +248,32 @@ void displayRecommendation(int passengerCount, double distance, int priority,
 
     cout << "Recommended ride: " << recommendedRide << endl;
     cout << "Reason: " << reason << endl;
+}
+
+bool askToContinue()
+{
+    int choice;
+
+    while (true)
+    {
+        cout << endl;
+        cout << "Would you like to make another recommendation?" << endl;
+        cout << "1. Yes" << endl;
+        cout << "2. No" << endl;
+        cout << "Enter your choice (1-2): ";
+
+        if (cin >> choice && choice >= 1 && choice <= 2)
+        {
+            return choice == 1;
+        }
+
+        if (cin.eof())
+        {
+            return false;
+        }
+
+        cout << "Invalid choice. Please enter 1 for Yes or 2 for No." << endl;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
 }
