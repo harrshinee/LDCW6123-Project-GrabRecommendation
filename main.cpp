@@ -1,3 +1,4 @@
+#include <iomanip>
 #include <iostream>
 #include <limits>
 #include <string>
@@ -24,6 +25,10 @@ int main()
 
     do
     {
+        cout << "----------------------------------------" << endl;
+        cout << "              TRIP DETAILS" << endl;
+        cout << "----------------------------------------" << endl;
+
         int passengerCount = getPassengerCount();
         if (passengerCount == 0)
         {
@@ -72,6 +77,7 @@ void displayWelcome()
     cout << endl;
     cout << "Welcome to the Grab Ride Selection System." << endl;
     cout << "This program will help recommend a ride option." << endl;
+    cout << "Educational simulation only; this is not Grab's actual algorithm." << endl;
     cout << endl;
 }
 
@@ -219,35 +225,39 @@ void displayRecommendation(int passengerCount, double distance, int priority,
                            int luggageOption, const string &recommendedRide,
                            const string &reason)
 {
-    cout << endl;
-    cout << "Passenger count: " << passengerCount << endl;
-    cout << "Travel distance: " << distance << " km" << endl;
-    cout << "Ride priority: ";
+    string priorityName;
 
     switch (priority)
     {
     case 1:
-        cout << "Budget" << endl;
+        priorityName = "Budget";
         break;
     case 2:
-        cout << "Comfort" << endl;
+        priorityName = "Comfort";
         break;
     case 3:
-        cout << "Speed" << endl;
+        priorityName = "Speed";
         break;
     }
 
-    if (luggageOption == 1)
-    {
-        cout << "Luggage: Yes" << endl;
-    }
-    else
-    {
-        cout << "Luggage: No" << endl;
-    }
-
-    cout << "Recommended ride: " << recommendedRide << endl;
-    cout << "Reason: " << reason << endl;
+    cout << endl;
+    cout << "========================================" << endl;
+    cout << "           RIDE RECOMMENDATION" << endl;
+    cout << "========================================" << endl;
+    cout << endl;
+    cout << left << setw(18) << "Passengers" << ": " << passengerCount << endl;
+    cout << left << setw(18) << "Distance" << ": " << fixed << setprecision(1)
+         << distance << " km" << endl;
+    cout << left << setw(18) << "Priority" << ": " << priorityName << endl;
+    cout << left << setw(18) << "Luggage" << ": "
+         << (luggageOption == 1 ? "Yes" : "No") << endl;
+    cout << endl;
+    cout << left << setw(18) << "Recommended Ride" << ": " << recommendedRide << endl;
+    cout << endl;
+    cout << "Reason:" << endl;
+    cout << reason << endl;
+    cout << endl;
+    cout << "========================================" << endl;
 }
 
 bool askToContinue()
